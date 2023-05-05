@@ -1,0 +1,16 @@
+# Documentation for pipelines can be found at
+# https://docs.drone.io/pipeline/docker/overview/ 
+deliveryhero:
+    version: v1.0
+    tribe: new-business
+    squad: corporate
+
+steps:
+    - name: build-test-images
+      pull: if-not-exist
+      group: building
+      image: eu.gcr.io/pd-infra-237911/deliveryhero/pd-ci/branches/master/ci:stable
+
+      commands:
+          - docker build -t "${DRONE_REPO_NAME}/corporate-api-root:1.20.2" -f Dockerfile .
+          - ci push "${DRONE_REPO_NAME}/corporate-api-root:1.20.2" corporate-api-root
